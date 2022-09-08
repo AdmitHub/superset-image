@@ -188,7 +188,7 @@ EXPLORE_FORM_DATA_CACHE_CONFIG = {
     "CACHE_REDIS_DB": REDIS_CACHE_DB,
 }
 # BP added Cache configurations
-CACHE_CONFIG: CacheConfig = {
+CACHE_CONFIG = {
     "CACHE_TYPE": "redis",
     "CACHE_REDIS_HOST": REDIS_HOST,
     "CACHE_REDIS_PORT": REDIS_PORT,
@@ -197,14 +197,14 @@ CACHE_CONFIG: CacheConfig = {
 
 
 # Cache for datasource metadata and query results
-DATA_CACHE_CONFIG: CacheConfig = {
+DATA_CACHE_CONFIG = {
     "CACHE_TYPE": "redis",
     "CACHE_REDIS_HOST": REDIS_HOST,
     "CACHE_REDIS_PORT": REDIS_PORT,
     "CACHE_REDIS_DB": REDIS_CACHE_DB,
 }
 
-THUMBNAIL_CACHE_CONFIG: CacheConfig = {
+THUMBNAIL_CACHE_CONFIG = {
     'CACHE_TYPE': 'redis',
     'CACHE_DEFAULT_TIMEOUT': 24*60*60*7,
     'CACHE_KEY_PREFIX': 'thumbnail_',
