@@ -81,7 +81,8 @@ EXTRA_CATEGORICAL_COLOR_SCHEMES = [
       '#BFF7FF',
     ]
     }]
-
+#Set Time Zone to local
+DRUID_TZ = tz.tzlocal()
 
 def get_env_variable(var_name: str, default: Optional[str] = None) -> str:
     """Get the environment variable or raise exception."""
@@ -99,11 +100,11 @@ def get_env_variable(var_name: str, default: Optional[str] = None) -> str:
 ## Data Amounts
 
 # default row limit when requesting chart data
-ROW_LIMIT = 1000000
+ROW_LIMIT = 10000000
 # default row limit when requesting samples from datasource in explore view
-SAMPLES_ROW_LIMIT = 150
+SAMPLES_ROW_LIMIT = 1000
 # max rows retrieved by filter select auto complete
-FILTER_SELECT_ROW_LIMIT = 10000
+FILTER_SELECT_ROW_LIMIT = 1000000
 DATABASE_DIALECT = get_env_variable("DATABASE_DIALECT")
 DATABASE_USER = get_env_variable("DATABASE_USER")
 DATABASE_PASSWORD = get_env_variable("DATABASE_PASSWORD")
@@ -154,8 +155,23 @@ CELERY_CONFIG = CeleryConfig
 RESULTS_BACKEND = RedisCache(
     host=REDIS_HOST, port=REDIS_PORT, key_prefix='superset_results')
 
+
+
+
+
+
 FEATURE_FLAGS = {"ALERT_REPORTS": True,
-                 "DASHBOARD_RBAC": True}
+                "DASHBOARD_RBAC": True,
+                "DASHBOARD_NATIVE_FILTERS": True,
+                "DASHBOARD_CROSS_FILTERS": True,
+                "DASHBOARD_NATIVE_FILTERS_SET": True,
+                 "GENERIC_CHART_AXES": True,
+                "EMBEDDED_SUPERSET": True,
+                 "ENABLE_TEMPLATE_PROCESSING": True,
+                 "THUMBNAILS": True,
+                 "THUMBNAILS_SQLA_LISTENERS": True,
+                 "DASHBOARD_CACHE": True,
+                 "ALLOW_FULL_CSV_EXPORT": True}
 
 # TODO: Should we add the other caches?
 FILTER_STATE_CACHE_CONFIG = {
@@ -170,14 +186,37 @@ EXPLORE_FORM_DATA_CACHE_CONFIG = {
     "CACHE_REDIS_PORT": REDIS_PORT,
     "CACHE_REDIS_DB": REDIS_CACHE_DB,
 }
+# BP added Cache configurations
+CACHE_CONFIG: CacheConfig = {
+    "CACHE_TYPE": "redis",
+    "CACHE_REDIS_HOST": REDIS_HOST,
+    "CACHE_REDIS_PORT": REDIS_PORT,
+    "CACHE_REDIS_DB": REDIS_CACHE_DB,
+}
 
+
+# Cache for datasource metadata and query results
+DATA_CACHE_CONFIG: CacheConfig = {
+    "CACHE_TYPE": "redis",
+    "CACHE_REDIS_HOST": REDIS_HOST,
+    "CACHE_REDIS_PORT": REDIS_PORT,
+    "CACHE_REDIS_DB": REDIS_CACHE_DB,
+}
+
+THUMBNAIL_CACHE_CONFIG: CacheConfig = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_DEFAULT_TIMEOUT': 24*60*60*7,
+    'CACHE_KEY_PREFIX': 'thumbnail_',
+    'CACHE_REDIS_URL': 'redis://localhost:6379/2'
+}
 ALERT_REPORTS_NOTIFICATION_DRY_RUN = True
 WEBDRIVER_BASEURL = "http://superset:8088/"
 # The base URL for the email report hyperlinks.
 WEBDRIVER_BASEURL_USER_FRIENDLY = WEBDRIVER_BASEURL
 
 SQLLAB_CTAS_NO_LIMIT = True
-
+# Maximum number of rows returned for any analytical database query
+SQL_MAX_ROW = 1000000
 #
 # Optionally import superset_config_docker.py (which will have been included on
 # the PYTHONPATH) in order to allow for local settings to be overridden
